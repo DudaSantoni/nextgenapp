@@ -11,4 +11,9 @@ export const authService = {
     const { data } = await api.post<UsuarioResponseDTO>('/usuarios/register', userData);
     return data;
   },
+
+  getUserById: async (id: string): Promise<UsuarioResponseDTO> => {
+    const { data } = await api.get<UsuarioResponseDTO>(`/usuarios/${id}`);
+    return data;
+  }
 };

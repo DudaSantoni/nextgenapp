@@ -1,23 +1,54 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { authService } from '../services/authService';
-import { LoginRequestDTO, RegisterRequestDTO } from '../types/auth';
+import { LoginRequestDTO, RegisterRequestDTO, UsuarioResponseDTO } from '../types/auth';
 
 export function useAuth() {
   const router = useRouter();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [user, setUser] = useState<UsuarioResponseDTO | null>(null);
+
+  const getUserIdFromToken = (token: string): string | null => {
+    try {
+      const payloadBase64 = token.split('.')[1];
+      const decodedJson = JSON.parse(atob(payloadBase64));
+      return decodedJson.id;
+    } catch (e) {
+      return null;
+    }
+  };
+
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      const token = localStorage.getItem('nextgen_token');
+      if (token) {
+        const userId = getUserIdFromToken(token);
+        if (userId) {
+          authService.getUserById(userId)
+            .then((userData) => setUser(userData))
+            .catch(() => logout());
+        }
+      }
+    }
+  }, []);
 
   const login = async (credentials: LoginRequestDTO) => {
     setLoading(true);
     setError(null);
-
     try {
       const data = await authService.login(credentials);
       localStorage.setItem('nextgen_token', data.token);
-      router.push('/home');
+      
+      const userId = getUserIdFromToken(data.token);
+      if (userId) {
+        const userData = await authService.getUserById(userId);
+        setUser(userData);
+      }
+
+      router.push('/home'); 
     } catch (err: any) {
       console.error(err);
       if (err.response && err.response.status === 401) {
@@ -33,10 +64,8 @@ export function useAuth() {
   const register = async (userData: RegisterRequestDTO) => {
     setLoading(true);
     setError(null);
-
     try {
       await authService.register(userData);
-      
       alert('Conta criada com sucesso! Faça login para continuar.');
       router.push('/'); 
     } catch (err: any) {
@@ -44,7 +73,7 @@ export function useAuth() {
       if (err.response && err.response.status === 400) {
         setError('Dados inválidos ou email já cadastrado.');
       } else {
-        setError('Erro ao criar conta. Tente novamente mais tarde.');
+        setError('Erro ao criar conta.');
       }
     } finally {
       setLoading(false);
@@ -53,6 +82,7 @@ export function useAuth() {
 
   const logout = () => {
     localStorage.removeItem('nextgen_token');
+    setUser(null);
     router.push('/');
   };
 
@@ -60,6 +90,7 @@ export function useAuth() {
     login,
     register,
     logout,
+    user,
     loading,
     error
   };
