@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { authService } from '../services/authService';
-import { LoginRequestDTO, RegisterRequestDTO, UsuarioResponseDTO } from '../types/auth';
+import { LoginRequestDTO, RegisterRequestDTO, UsuarioResponseDTO } from '../model/types/auth';
 
 export function useAuth() {
   const router = useRouter();

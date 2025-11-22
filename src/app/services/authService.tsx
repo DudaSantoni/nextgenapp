@@ -1,5 +1,5 @@
 import api from '../lib/api';
-import { LoginRequestDTO, LoginResponseDTO, RegisterRequestDTO, UsuarioResponseDTO } from '../types/auth';
+import { LoginRequestDTO, LoginResponseDTO, RegisterRequestDTO, UsuarioResponseDTO } from '../model/types/auth';
 
 export const authService = {
   login: async (credentials: LoginRequestDTO): Promise<LoginResponseDTO> => {

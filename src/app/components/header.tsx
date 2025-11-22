@@ -4,11 +4,11 @@ import React, { useState } from 'react';
 import Image from "next/image";
 import Link from "next/link";
 import { Menu, X, User, Home, Settings, LogOut } from 'lucide-react';
-import { useAuth } from '../hooks/useAuth'; 
+import { useAuth } from '../hooks/useAuth';
 
 export default function Header() {
     const [isSidebarOpen, setIsSidebarOpen] = useState(false);
-    
+
     const { logout, user } = useAuth();
 
     const closeSidebar = () => setIsSidebarOpen(false);
@@ -76,7 +76,7 @@ export default function Header() {
                 </section>
 
                 <section className="flex justify-end items-center gap-4">
-                    <button 
+                    <button
                         onClick={logout}
                         className="hidden md:flex items-center gap-2 text-red-500 hover:bg-red-50 px-3 py-1 rounded-full transition-colors text-sm font-medium"
                     >
@@ -100,7 +100,6 @@ export default function Header() {
                         </figure>
                     </Link>
                 </section>
-
             </header>
 
             {isSidebarOpen && (
@@ -120,8 +119,8 @@ export default function Header() {
                     <header className="flex items-center justify-between mb-8 border-b border-white/20 pb-4">
                         <section className="flex items-center gap-3">
                             <section className="w-10 h-10 rounded-full border-2 border-white overflow-hidden">
-                                <Image 
-                                    src={user?.fotoPerfil || "/icon.png"} 
+                                <Image
+                                    src={user?.fotoPerfil || "/icon.png"}
                                     alt="Perfil"
                                     width={0}
                                     height={0}
@@ -152,7 +151,7 @@ export default function Header() {
                     </nav>
 
                     <footer className="border-t border-white/20 pt-4">
-                        <button 
+                        <button
                             onClick={() => {
                                 closeSidebar();
                                 logout();

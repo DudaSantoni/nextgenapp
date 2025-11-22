@@ -31,7 +31,7 @@ export default function App() {
                         404 Não Encontrado
                     </h1>
 
-                    <Link href='/'
+                    <Link href='/home'
                         className="flex justify-center items-center gap-2 px-8 py-3 rounded-full text-white w-[70dvw] md:w-[18dvw] font-semibold shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 transition-all duration-200 group"
                         style={{
                             background: 'linear-gradient(90deg, #7d9d42 0%, #9cc53b 100%)'
